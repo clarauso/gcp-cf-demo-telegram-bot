@@ -1,4 +1,5 @@
 import asyncio
+from typing import List
 
 import functions_framework
 import logging
@@ -22,10 +23,10 @@ def send_message(request):
         return Template(ERR_JSON).safe_substitute(code=config_telegram_error), 500
 
     # retrieve post list and send Telegram message
-    posts = retrieve_posts()
+    posts: List[Post] = retrieve_posts()
     latest_post: Post = posts.pop()
     msg: str = f"Latest post title is\n<b>{latest_post.title}</b>"
-    message_sent = asyncio.run(send_telegram_message(msg))
+    message_sent: bool = asyncio.run(send_telegram_message(msg))
 
     json_outcome: str
     if message_sent:

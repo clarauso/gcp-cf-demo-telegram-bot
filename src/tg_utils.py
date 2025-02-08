@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import telegram
 from typing import List, Optional
@@ -34,10 +35,17 @@ async def send_telegram_message(msg: str, chat_ids: List[str]=None) -> bool:
     chatbot = telegram.Bot(token=token)
     async with asyncio.TaskGroup() as tg:
         for chat_id in chat_ids:
-            tg.create_task(chatbot.send_message(chat_id=chat_id, text=msg, parse_mode=ParseMode.HTML))
+            tg.create_task(__try_send_message(chatbot, chat_id, msg, ParseMode.HTML))
 
     return True
 
+
+async def __try_send_message(chatbot: telegram.Bot, chat_id: str, msg: str, parse_mode: ParseMode):
+    """Send the message handling errors only by logging the Exception"""
+    try:
+        await chatbot.send_message(chat_id=chat_id, text=msg, parse_mode=parse_mode)
+    except Exception as e:
+        logging.warning(f"Error sending message to {chat_id}: {e}")
 
 def __get_telegram_chat_ids() -> List[str]:
     """Return the chat ids to send messages to"""
