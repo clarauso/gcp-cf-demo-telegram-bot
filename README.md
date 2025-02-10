@@ -1,6 +1,6 @@
 # Cloud Run Function for a Telegram bot
 
-This repository contains an example of Python code that retrieves data from a public API endpoint and sends a Telegram message using the retrieved info.
+This repository contains an example of Python code that gets data from a public API endpoint and sends a Telegram message using the retrieved info.
 
 ## Local testing
 
